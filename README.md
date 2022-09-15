@@ -1,4 +1,4 @@
-# Caixeiro Viajante
+# Caixeiro Viajante (algoritmo genético)
 
 ### 💻 Tecnologias
 <div style="display: flex;">
