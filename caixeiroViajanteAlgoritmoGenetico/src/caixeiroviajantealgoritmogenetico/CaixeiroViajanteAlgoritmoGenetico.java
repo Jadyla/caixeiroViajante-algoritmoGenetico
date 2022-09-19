@@ -70,6 +70,9 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         
         cruzamento(aux, 5, k, qtdeVertices);
         aux.mostraPopulacao();
+        
+        mutacao(aux, 5, k, qtdeVertices);
+        aux.mostraPopulacao();
     }
     
     //********************CRIA INDIVÍDUOS*******************
@@ -164,5 +167,32 @@ public class CaixeiroViajanteAlgoritmoGenetico {
             aux.adicionaIndividuo(aux2);
         }
         
+    }
+    
+    public static void mutacao(Populacao aux, int qtdeDeMutacoes, int k, int tam){
+        System.out.println("-------------MUTAÇÃO-------------");
+        Random gerador = new Random();
+        int aleat, aux3;
+        int divisao = aux.getQtdeVertices() / 2;
+        
+        for (int i = 0; i < qtdeDeMutacoes; i++) {
+            aleat = gerador.nextInt(k);
+            
+            //para PRINTAR todo o processo de mutação: DESCOMENTAR os comentários abaixo
+            /*System.out.print("Antes (" + aleat + "): ");
+            for (int j = 0; j < tam; j++) {
+                System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[j]);
+            }
+            System.out.println();*/
+            aux3 = aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao-1];
+            aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao-1] = aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao+1];
+            aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao+1] = aux3;
+            /*System.out.print("Depois (" + aleat + "): ");
+            for (int j = 0; j < tam; j++) {
+                System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[j]);
+            }
+            System.out.println();
+            System.out.println("********");*/
+        }
     }
 }
