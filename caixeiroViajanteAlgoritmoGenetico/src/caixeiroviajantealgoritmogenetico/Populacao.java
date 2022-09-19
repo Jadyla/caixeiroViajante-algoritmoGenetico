@@ -16,7 +16,7 @@ public class Populacao {
         this.individuo = individuo;
     }
     
-    public void adicionaIndividuo(Populacao novoIndividuo, int cont){
+    public void adicionaIndividuo(Populacao novoIndividuo){
         listaDeIndividuos.add(novoIndividuo);
     }
     
@@ -28,6 +28,7 @@ public class Populacao {
             }
             System.out.println();
         }
+        System.out.println();
     }
     
     
@@ -35,6 +36,9 @@ public class Populacao {
     //*******************MÉTODOS GETs E SETs*******************
     public void setIndividuo(int[] individuo){
         this.individuo = individuo;
+    }
+    public int[] getIndividuo(){
+        return individuo;
     }
     public void setK(int qtde){
         this.k = qtde;
@@ -44,5 +48,8 @@ public class Populacao {
     }
     public void setQtdeVertices(int qtde){
         this.qtdeVertices = qtde;
+    }
+    public int getQtdeVertices(){
+        return qtdeVertices;
     }
 }

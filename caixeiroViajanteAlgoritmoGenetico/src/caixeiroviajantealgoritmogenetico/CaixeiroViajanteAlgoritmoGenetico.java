@@ -54,25 +54,28 @@ public class CaixeiroViajanteAlgoritmoGenetico {
             matrizAdj[i][i] = -1;
         }
         
-        System.out.println("****MATRIZ****");
+        System.out.println("-------------MATRIZ-------------");
         for (int i = 0; i < qtdeVertices; i++) {
             for (int j = 0; j < qtdeVertices; j++) {
                 System.out.print(matrizAdj[i][j] + "    ");
             }
             System.out.println("  ");
         }
-        System.out.println("*************");
-        System.out.println(" ");
+        System.out.println();
         
         aux.setK(k);
         aux.setQtdeVertices(qtdeVertices);
         criaIndividuos(k, qtdeVertices, aux);
+        aux.mostraPopulacao();
+        
+        cruzamento(aux, 5, k, qtdeVertices);
         aux.mostraPopulacao();
     }
     
     //********************CRIA INDIVÍDUOS*******************
     //criação dos indvíduos de maneira aleatória
     public static void criaIndividuos(int k, int tam, Populacao aux){
+        System.out.println("-------------POPULAÇÃO-------------");
         boolean visitados[];
         int caminho[];
         
@@ -92,7 +95,7 @@ public class CaixeiroViajanteAlgoritmoGenetico {
             }
             Populacao aux2 = new Populacao();
             aux2.setIndividuo(caminho);
-            aux.adicionaIndividuo(aux2, i);
+            aux.adicionaIndividuo(aux2);
         }
     }
     
@@ -108,5 +111,58 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         }while(visitados[aleat] == true);
         
         return aleat;
+    }
+    
+    //********************CRUZAMENTO*******************
+    public static void cruzamento(Populacao aux, int qtdeDeCruzamentos, int k, int tam){ //qtdeDeCruzamentos = 0.2 * k (20%)
+        System.out.println("-------------CRUZAMENTO-------------");
+        Random gerador = new Random();
+        int nPai, nMae;
+        int filho[], pai[], mae[];
+        int divisao = aux.getQtdeVertices() / 2;
+        
+        
+        for (int i = 0; i < qtdeDeCruzamentos; i++) {
+            filho = new int[tam];
+            do{
+                nPai = gerador.nextInt(k);
+                nMae = gerador.nextInt(k);
+            }while (nPai == nMae);
+            pai = aux.getListaDeIndividuos().get(nPai).getIndividuo();
+            mae = aux.getListaDeIndividuos().get(nMae).getIndividuo();
+            for (int j = 0; j < divisao; j++) {
+                filho[j] = pai[j]; //primeia metade igual ao pai
+            }
+            for (int j = divisao; j < tam; j++) {
+                filho[j] = mae[j]; //segunda metade igual a mae
+            }
+            
+            
+            //para PRINTAR todo o processo de criação dos filhos: DESCOMENTAR linhas abaixo
+            /*
+            System.out.print("PAI (" + nPai + "): ");
+            for (int j = 0; j < tam; j++) {
+                System.out.print(pai[j]);
+            }
+            System.out.println();
+            System.out.print("MAE (" + nMae + "): ");
+            for (int j = 0; j < tam; j++) {
+                System.out.print(mae[j]);
+            }
+            System.out.println();
+            System.out.print("FILHO: ");
+            for (int j = 0; j < tam; j++) {
+                System.out.print(filho[j]);
+            }
+            System.out.println();
+            System.out.println("*************");
+            */
+            
+            
+            Populacao aux2 = new Populacao();
+            aux2.setIndividuo(filho);
+            aux.adicionaIndividuo(aux2);
+        }
+        
     }
 }
