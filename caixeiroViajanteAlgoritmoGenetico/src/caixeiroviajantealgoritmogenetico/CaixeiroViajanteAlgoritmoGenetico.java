@@ -1,24 +1,29 @@
 package caixeiroviajantealgoritmogenetico;
 import java.util.ArrayList;
+import java.util.Random;
 /**
  *
  * @author jadyl
  */
 public class CaixeiroViajanteAlgoritmoGenetico {
+    
     public static void main(String[] args) {
+        //******************DEFINIR ALEATÓRIOS*********************
+        //k = quantidade de indivíduos
+        //iteracoes = numero de geracoes
+        int k = 10;
+        int iteracoes;
+        
+        Populacao aux = new Populacao();
         int qtdeVertices, peso, vertice, qtdeArestas;
         int matrizAdj[][] = null;
         String caminhos;
         
         //*****************LEITURA*********************
         FileManager fileManager = new FileManager();
-        ArrayList<String> text = fileManager.stringReader("./Teste_2.txt");
-        //printando texto da entrada
-        //System.out.println(text);
+        ArrayList<String> text = fileManager.stringReader("./Teste_1.txt");
         
         qtdeVertices = Integer.parseInt(text.get(0));
-        //printando quantidade de vertices
-        //System.out.println(qtdeVertices);
         matrizAdj = new int[qtdeVertices][qtdeVertices];
         
         
@@ -58,5 +63,50 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         }
         System.out.println("*************");
         System.out.println(" ");
+        
+        aux.setK(k);
+        aux.setQtdeVertices(qtdeVertices);
+        criaIndividuos(k, qtdeVertices, aux);
+        aux.mostraPopulacao();
+    }
+    
+    //********************CRIA INDIVÍDUOS*******************
+    //criação dos indvíduos de maneira aleatória
+    public static void criaIndividuos(int k, int tam, Populacao aux){
+        boolean visitados[];
+        int caminho[];
+        
+        visitados = new boolean[tam];
+        
+        for (int i = 0; i < k; i++) {
+            caminho = new int[tam];
+            caminho[0] = 0;
+            visitados[0] = true;
+            for (int j = 1; j < tam; j++) {
+                visitados[j] = false;
+            }
+            for (int j = 1; j < tam; j++) {
+                int aleat = geraNumerosAleatorios(tam, visitados);
+                caminho[j] = aleat;
+                visitados[aleat] = true;
+            }
+            Populacao aux2 = new Populacao();
+            aux2.setIndividuo(caminho);
+            aux.adicionaIndividuo(aux2, i);
+        }
+    }
+    
+    
+    //********************GERA ALEATÓRIOS*******************
+    //nesta função já é verificado se foi visitado ou não para gerar o aleatorio
+    public static int geraNumerosAleatorios(int tam, boolean[] visitados){
+        Random gerador = new Random();
+        int aleat;
+        
+        do{
+            aleat = gerador.nextInt(tam);
+        }while(visitados[aleat] == true);
+        
+        return aleat;
     }
 }
