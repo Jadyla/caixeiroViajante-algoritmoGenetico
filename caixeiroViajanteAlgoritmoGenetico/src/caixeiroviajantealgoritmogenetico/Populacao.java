@@ -11,6 +11,7 @@ public class Populacao {
     private int individuo[];
     private int qtdeVertices;
     private int k;
+    private int matriz[][];
     
     public Populacao(){
         this.individuo = individuo;
@@ -18,6 +19,10 @@ public class Populacao {
     
     public void adicionaIndividuo(Populacao novoIndividuo){
         listaDeIndividuos.add(novoIndividuo);
+    }
+    
+    public void removeIndividuo(int i){
+        listaDeIndividuos.remove(i);
     }
     
     public void mostraPopulacao(){
@@ -51,5 +56,11 @@ public class Populacao {
     }
     public int getQtdeVertices(){
         return qtdeVertices;
+    }
+    public void setMatriz(int[][] matrizAdj){
+        this.matriz = matrizAdj;
+    }
+    public int[][] getMatriz(){
+        return matriz;
     }
 }

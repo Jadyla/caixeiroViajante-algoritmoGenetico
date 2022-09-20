@@ -11,8 +11,14 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         //******************DEFINIR ALEATÓRIOS*********************
         //k = quantidade de indivíduos
         //iteracoes = numero de geracoes
+        //mutacoesPorIndividuo = mudancas dentro do individuo
+        //qtdeMutacoes = numero de mutacoes na fase de mutacao
+        //qtdeDeCruzamentos = numero de cruzamentos na fase de cruzamentos
         int k = 10;
         int iteracoes;
+        int mutacoesPorIndividuo = 5;
+        int qtdeDeMutacoes = 5;
+        int qtdeDeCruzamentos = 5;
         
         Populacao aux = new Populacao();
         int qtdeVertices, peso, vertice, qtdeArestas;
@@ -65,13 +71,15 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         
         aux.setK(k);
         aux.setQtdeVertices(qtdeVertices);
+        aux.setMatriz(matrizAdj);
+        
         criaIndividuos(k, qtdeVertices, aux);
         aux.mostraPopulacao();
         
-        cruzamento(aux, 5, k, qtdeVertices);
+        cruzamento(aux, qtdeDeCruzamentos, k, qtdeVertices);
         aux.mostraPopulacao();
         
-        mutacao(aux, 5, k, qtdeVertices);
+        mutacao(aux, qtdeDeMutacoes, k, qtdeVertices, mutacoesPorIndividuo);
         aux.mostraPopulacao();
     }
     
@@ -86,12 +94,12 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         
         for (int i = 0; i < k; i++) {
             caminho = new int[tam];
-            caminho[0] = 0;
-            visitados[0] = true;
-            for (int j = 1; j < tam; j++) {
+            //caminho[0] = 0;
+            //visitados[0] = true;
+            for (int j = 0; j < tam; j++) {
                 visitados[j] = false;
             }
-            for (int j = 1; j < tam; j++) {
+            for (int j = 0; j < tam; j++) {
                 int aleat = geraNumerosAleatorios(tam, visitados);
                 caminho[j] = aleat;
                 visitados[aleat] = true;
@@ -169,30 +177,37 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         
     }
     
-    public static void mutacao(Populacao aux, int qtdeDeMutacoes, int k, int tam){
+    //********************MUTAÇÃO*******************
+    //a mutação feita foi de troca, entre o meio +1 e o meio -1
+    public static void mutacao(Populacao aux, int qtdeDeMutacoes, int k, int tam, int mutacoesPorIndividuo){
         System.out.println("-------------MUTAÇÃO-------------");
         Random gerador = new Random();
-        int aleat, aux3;
-        int divisao = aux.getQtdeVertices() / 2;
+        int aleat, aux3, gene1, gene2;
         
         for (int i = 0; i < qtdeDeMutacoes; i++) {
             aleat = gerador.nextInt(k);
-            
-            //para PRINTAR todo o processo de mutação: DESCOMENTAR os comentários abaixo
-            /*System.out.print("Antes (" + aleat + "): ");
-            for (int j = 0; j < tam; j++) {
-                System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[j]);
+            for (int j = 0; j < mutacoesPorIndividuo; j++) {
+                do{
+                    gene1 = gerador.nextInt(tam);
+                    gene2 = gerador.nextInt(tam);
+                }while(gene1 == gene2);
+
+                //para PRINTAR todo o processo de mutação: DESCOMENTAR os comentários abaixo
+                /*System.out.print("Antes (" + aleat + "): ");
+                for (int n = 0; n < tam; n++) {
+                    System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[n]);
+                }
+                System.out.println();*/
+                aux3 = aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene1];
+                aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene1] = aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene2];
+                aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene2] = aux3;
+                /*System.out.print("Depois (" + aleat + "): ");
+                for (int n = 0; n < tam; n++) {
+                    System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[n]);
+                }
+                System.out.println();
+                System.out.println("********");*/
             }
-            System.out.println();*/
-            aux3 = aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao-1];
-            aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao-1] = aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao+1];
-            aux.getListaDeIndividuos().get(aleat).getIndividuo()[divisao+1] = aux3;
-            /*System.out.print("Depois (" + aleat + "): ");
-            for (int j = 0; j < tam; j++) {
-                System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[j]);
-            }
-            System.out.println();
-            System.out.println("********");*/
         }
     }
 }
