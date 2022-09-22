@@ -21,7 +21,7 @@ Algoritmos Genéticos são algoritmos de otimização global, baseados nos mecan
 estruturada, mas aleatória, que é voltada em direção ao reforço da busca de pontos de "alta aptidão", ou seja, pontos nos quais a função a ser minimizada (ou maximizada) 
 tem valores relativamente baixos (ou altos). Apesar de aleatórios, eles não são caminhadas aleatórias não direcionadas, pois exploram informações históricas para
 encontrar novos pontos de busca onde são esperados melhores desempenhos. Isto é feito através de processos iterativos, onde cada iteração é chamada de geração. <br>
-A cada iteração os seguintes etapas são realizadas:
+A cada iteração as seguintes etapas são realizadas:
 <ul>
   <li>Geração da população: uma nova população de indivíduos é criada aleatoriamente, somada com os indivíduos vindos da selação da geração anterior;</li>
   <li>Cruzamento: dois indivíduos são selecionados aleatoriamente, gerando um novo indivíduo (filho) advindo da concatenação de parte dos dois aleatórios. Esse novo 
@@ -46,3 +46,8 @@ porcentagem de indivíduos para cruzamento, mutação, etc. Segue abaixo algumas
 Como saída tem-se que, após todas as iterações determinadas, o melhor dentre todos indivíduos indicará o melhor caminho possível com o menor esforço, dentre todos os 
 indivíduos que foram gerados.<br>
 De maneira geral, o resultado pode não ser o melhor dentre todas as possibilidades possíveis, mas é o melhor que pôde ser calculado.
+
+
+### 🔍 Observação
+O código porposto se atém a resolver problemas com arestas não direcionadas, ou seja, se existe um caminho de um vértice para o outro, o retorno também é válido. 
+Testes foram feitos para caminhos direcionados, mas parte do código precisa ser alterado para obter tal resultado, mais precisamente na etapa de seleção.
