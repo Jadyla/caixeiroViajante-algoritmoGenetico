@@ -11,19 +11,27 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         //******************DEFINIR ALEATÓRIOS*********************
         //k = quantidade de indivíduos
         //iteracoes = numero de geracoes
+        //porcentagem da população que sofrerá mutação, cruzamento e que passará da seleção. A porcentagem vezes a quantidade 
+        //de vértices vai indicar a quantidade de trocas na mutação
+        
+        int k = 10;
+        double porcentagem = 0.5;
+        int iteracoes = 5;
+        
         //mutacoesPorIndividuo = mudancas dentro do individuo
         //qtdeMutacoes = numero de mutacoes na fase de mutacao
         //qtdeDeCruzamentos = numero de cruzamentos na fase de cruzamentos
         //passaDaSelecao = numero de melhores individuos que vai passar para a proxima iteracao (elitismo)
-        int k = 10;
-        int iteracoes = 5;
-        int qtdeDeCruzamentos = 5;
-        int mutacoesPorIndividuo = 5;
-        int qtdeDeMutacoes = 5;
-        int passaDaSelecao = 5;
-        
+        int qtdeDeCruzamentos;
+        int mutacoesPorIndividuo;
+        int qtdeDeMutacoes;
+        int passaDaSelecao;
         int qtdeGerados;
+        
         qtdeGerados = k;
+        qtdeDeCruzamentos = (int)(porcentagem * k);
+        qtdeDeMutacoes = (int)(porcentagem * k);
+        passaDaSelecao = (int)(porcentagem * k);
         
         Populacao aux = new Populacao();
         int qtdeVertices, peso, vertice, qtdeArestas;
@@ -37,7 +45,8 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         qtdeVertices = Integer.parseInt(text.get(0));
         matrizAdj = new int[qtdeVertices][qtdeVertices];
         
-        
+        //a porcentagem determinada vezes a quantidade de vertices = quantidade de trocas na mutacao
+        mutacoesPorIndividuo = (int)(porcentagem * qtdeVertices);
         
         ///*****************CRIANDO MATRIZ DE ADJACÊNCIA*********************
         for (int i = 0; i < qtdeVertices; i++) {
@@ -78,6 +87,7 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         aux.setQtdeVertices(qtdeVertices);
         aux.setMatriz(matrizAdj);
         
+        long tempoInicial = System.currentTimeMillis();
         for (int i = 0; i < iteracoes; i++) {
             System.out.println("#################### GERAÇÃO " + i + " ####################");
             System.out.println();
@@ -97,9 +107,15 @@ public class CaixeiroViajanteAlgoritmoGenetico {
             aux.mostraPopulacao();
             qtdeGerados = k - passaDaSelecao;
         }
+        long tempoFinal = System.currentTimeMillis();
         System.out.println();
         System.out.println("+++++++++++++++++++++++++++++++++++++");
+        System.out.println("Tempo de execução: " + (tempoFinal - tempoInicial) + " ms");
         System.out.println("Gerações: " + iteracoes);
+        System.out.println("População: " + k + " indivíduos");
+        System.out.println("Cruzamentos por geração: " + qtdeDeCruzamentos);
+        System.out.println("Mutações por geração: " + qtdeDeMutacoes);
+        System.out.println("Trocas por mutação: " + mutacoesPorIndividuo);
         exibeMelhorCaminho(aux, qtdeVertices);
     }
     
