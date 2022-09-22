@@ -16,11 +16,14 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         //qtdeDeCruzamentos = numero de cruzamentos na fase de cruzamentos
         //passaDaSelecao = numero de melhores individuos que vai passar para a proxima iteracao (elitismo)
         int k = 10;
-        int iteracoes;
+        int iteracoes = 5;
+        int qtdeDeCruzamentos = 5;
         int mutacoesPorIndividuo = 5;
         int qtdeDeMutacoes = 5;
-        int qtdeDeCruzamentos = 5;
         int passaDaSelecao = 5;
+        
+        int qtdeGerados;
+        qtdeGerados = k;
         
         Populacao aux = new Populacao();
         int qtdeVertices, peso, vertice, qtdeArestas;
@@ -75,16 +78,29 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         aux.setQtdeVertices(qtdeVertices);
         aux.setMatriz(matrizAdj);
         
-        criaIndividuos(k, qtdeVertices, aux);
-        aux.mostraPopulacao();
-        
-        cruzamento(aux, qtdeDeCruzamentos, k, qtdeVertices);
-        aux.mostraPopulacao();
-        
-        mutacao(aux, qtdeDeMutacoes, k, qtdeVertices, mutacoesPorIndividuo);
-        aux.mostraPopulacao();
-        
-        selecao (k, qtdeVertices, aux);
+        for (int i = 0; i < iteracoes; i++) {
+            System.out.println("#################### GERAÇÃO " + i + " ####################");
+            System.out.println();
+            System.out.println();
+            criaIndividuos(qtdeGerados, qtdeVertices, aux);
+            aux.mostraPopulacao();
+
+            cruzamento(aux, qtdeDeCruzamentos, k, qtdeVertices);
+            aux.mostraPopulacao();
+            
+            k = k + qtdeDeCruzamentos;
+            mutacao(aux, qtdeDeMutacoes, k, qtdeVertices, mutacoesPorIndividuo);
+            aux.mostraPopulacao();
+
+            k = k - qtdeDeCruzamentos;
+            selecao (k, qtdeVertices, aux, passaDaSelecao, qtdeDeCruzamentos);
+            aux.mostraPopulacao();
+            qtdeGerados = k - passaDaSelecao;
+        }
+        System.out.println();
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        System.out.println("Gerações: " + iteracoes);
+        exibeMelhorCaminho(aux, qtdeVertices);
     }
     
     //********************CRIA INDIVÍDUOS*******************
@@ -218,8 +234,40 @@ public class CaixeiroViajanteAlgoritmoGenetico {
     }
     
     //********************SELEÇÃO*******************
-    public static void selecao(int k, int tam, Populacao aux){
+    public static void selecao(int k, int tam, Populacao aux, int passaDaSelecao, int qtdeDeCruzamentos){
         System.out.println("---------------------SELEÇÃO---------------------");
+        int menorEsforco, posicao;
+        
+        //*****************ORDENAÇÃO*********************
+        while (aux.getListaDeIndividuos().size() != 0){
+            posicao = 0;
+            menorEsforco = aux.getListaDeIndividuos().get(0).getEsforco();
+            
+            for (int i = 1; i < aux.getListaDeIndividuos().size(); i++) {
+                if (aux.getListaDeIndividuos().get(i).getEsforco() == -1){
+                    continue;
+                }else{
+                    if (aux.getListaDeIndividuos().get(i).getEsforco() <= menorEsforco){
+                        menorEsforco = aux.getListaDeIndividuos().get(i).getEsforco();
+                        posicao = i;
+                    }
+                }
+            }
+            
+            Populacao aux2 = new Populacao();
+            aux2.setIndividuo(aux.getListaDeIndividuos().get(posicao).getIndividuo());
+            aux2.setEsforco(aux.getListaDeIndividuos().get(posicao).getEsforco());
+            aux.adicionaIndividuoAux(aux2);
+            aux.removeIndividuo(posicao);
+        }
+        
+        aux.getListaDeIndividuos().addAll(aux.getListaDeIndividuosAux());
+        aux.getListaDeIndividuosAux().clear();
+        
+        //*****************ELITISMO*********************
+        for (int i = passaDaSelecao; i < k+qtdeDeCruzamentos; i++) {
+            aux.removeIndividuo(passaDaSelecao);
+        }
         
     }
     
@@ -251,7 +299,15 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         if (aux.getMatriz()[v[tam-1]][v[0]] == -1){
             soma = -1;
         }
-        //System.out.println(soma);
         return soma;
+    }
+    
+    public static void exibeMelhorCaminho(Populacao aux, int tam){
+        System.out.print("Melhor caminho: ");
+        for (int i = 0; i < tam; i++) {
+            System.out.print(aux.getListaDeIndividuos().get(0).getIndividuo()[i] + " ");
+        }
+        System.out.println();
+        System.out.println("Esforço: " + aux.getListaDeIndividuos().get(0).getEsforco());
     }
 }

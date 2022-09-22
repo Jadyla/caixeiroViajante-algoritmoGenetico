@@ -24,8 +24,16 @@ public class Populacao {
         listaDeIndividuos.add(novoIndividuo);
     }
     
+    public void adicionaIndividuoAux (Populacao novoIndividuo){
+        listaDeIndividuosAux.add(novoIndividuo);
+    }
+    
     public void removeIndividuo(int i){
         listaDeIndividuos.remove(i);
+    }
+    
+    public void removeIndividuoAux(int i){
+        listaDeIndividuosAux.remove(i);
     }
     
     public void mostraPopulacao(){
@@ -35,6 +43,18 @@ public class Populacao {
                 System.out.print(getListaDeIndividuos().get(i).individuo[j] + " ");
             }
             System.out.print("   Esforço: " + getListaDeIndividuos().get(i).esforco);
+            System.out.println();
+        }
+        System.out.println();
+    }
+    public void mostraPopulacaoAux(){
+        System.out.println("AQUIIIIIIIIII");
+        for (int i = 0; i < getListaDeIndividuosAux().size(); i++) {
+            System.out.print("Individuo " + i + ": ");
+            for (int j = 0; j < qtdeVertices; j++) {
+                System.out.print(getListaDeIndividuosAux().get(i).individuo[j] + " ");
+            }
+            System.out.print("   Esforço: " + getListaDeIndividuosAux().get(i).esforco);
             System.out.println();
         }
         System.out.println();
@@ -54,6 +74,9 @@ public class Populacao {
     }
     public ArrayList<Populacao> getListaDeIndividuos(){
         return listaDeIndividuos;
+    }
+    public void setListaDeIndividuos(ArrayList<Populacao> lista){
+        this.listaDeIndividuos = lista;
     }
     public void setQtdeVertices(int qtde){
         this.qtdeVertices = qtde;
