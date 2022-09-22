@@ -8,13 +8,16 @@ import java.util.ArrayList;
  */
 public class Populacao {
     private ArrayList<Populacao> listaDeIndividuos = new ArrayList();
+    private ArrayList<Populacao> listaDeIndividuosAux = new ArrayList();
     private int individuo[];
     private int qtdeVertices;
     private int k;
     private int matriz[][];
+    private int esforco;
     
     public Populacao(){
         this.individuo = individuo;
+        this.esforco = esforco;
     }
     
     public void adicionaIndividuo(Populacao novoIndividuo){
@@ -31,6 +34,7 @@ public class Populacao {
             for (int j = 0; j < qtdeVertices; j++) {
                 System.out.print(getListaDeIndividuos().get(i).individuo[j] + " ");
             }
+            System.out.print("   Esforço: " + getListaDeIndividuos().get(i).esforco);
             System.out.println();
         }
         System.out.println();
@@ -62,5 +66,14 @@ public class Populacao {
     }
     public int[][] getMatriz(){
         return matriz;
+    }
+    public ArrayList<Populacao> getListaDeIndividuosAux(){
+        return listaDeIndividuosAux;
+    }
+    public void setEsforco(int esforco){
+        this.esforco = esforco;
+    }
+    public int getEsforco(){
+        return esforco;
     }
 }
