@@ -8,13 +8,15 @@ import java.util.Random;
 public class CaixeiroViajanteAlgoritmoGenetico {
     
     public static void main(String[] args) {
+        //aprimoramento: vai dar problema se o primeiro caminho da lista não for válido (caminhos direcionados e não todos conectados)
+        //otimização: escolher o melhor dentre todos da mutação com base em seu esforço
         //******************DEFINIR ALEATÓRIOS*********************
         //k = quantidade de indivíduos
         //iteracoes = numero de geracoes
         //porcentagem da população que sofrerá mutação, cruzamento e que passará da seleção. A porcentagem vezes a quantidade 
         //de vértices vai indicar a quantidade de trocas na mutação
         
-        int k = 10;
+        int k = 100000;
         double porcentagem = 0.5;
         int iteracoes = 5;
         
@@ -239,6 +241,7 @@ public class CaixeiroViajanteAlgoritmoGenetico {
                 aux3 = aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene1];
                 aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene1] = aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene2];
                 aux.getListaDeIndividuos().get(aleat).getIndividuo()[gene2] = aux3;
+                aux.getListaDeIndividuos().get(aleat).setEsforco(calculaEsforco(aux.getListaDeIndividuos().get(aleat).getIndividuo(), aux, tam));
                 /*System.out.print("Depois (" + aleat + "): ");
                 for (int n = 0; n < tam; n++) {
                     System.out.print(aux.getListaDeIndividuos().get(aleat).getIndividuo()[n]);
@@ -299,6 +302,14 @@ public class CaixeiroViajanteAlgoritmoGenetico {
                 break;
             }
             soma = soma + aux.getMatriz()[v[j]][v[j+1]];
+            if (j == tam-2){
+                if (aux.getMatriz()[v[tam-1]][v[0]] != -1){
+                    soma = soma + aux.getMatriz()[v[tam-1]][v[0]];
+                }else if (aux.getMatriz()[v[tam-1]][v[0]] == -1){
+                    soma = -1;
+                    break;
+                }
+            }
         }
         for (int i = 0; i < tam; i++) {
             for (int j = i+1; j < tam; j++) {
