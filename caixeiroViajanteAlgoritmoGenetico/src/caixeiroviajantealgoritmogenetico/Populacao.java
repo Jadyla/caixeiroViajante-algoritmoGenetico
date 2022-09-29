@@ -42,7 +42,8 @@ public class Populacao {
             for (int j = 0; j < qtdeVertices; j++) {
                 System.out.print(getListaDeIndividuos().get(i).individuo[j] + " ");
             }
-            System.out.print("   Esforço: " + getListaDeIndividuos().get(i).esforco);
+            System.out.println();
+            System.out.print("Esforço: " + getListaDeIndividuos().get(i).esforco);
             System.out.println();
         }
         System.out.println();

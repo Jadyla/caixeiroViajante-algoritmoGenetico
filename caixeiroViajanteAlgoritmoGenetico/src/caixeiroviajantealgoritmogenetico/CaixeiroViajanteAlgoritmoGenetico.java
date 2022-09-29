@@ -16,9 +16,9 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         //porcentagem da população que sofrerá mutação, cruzamento e que passará da seleção. A porcentagem vezes a quantidade 
         //de vértices vai indicar a quantidade de trocas na mutação
         
-        int k = 100000;
-        double porcentagem = 0.5;
-        int iteracoes = 5;
+        int k = 100;
+        double porcentagem = 0.2;
+        int iteracoes = 10;
         
         //mutacoesPorIndividuo = mudancas dentro do individuo
         //qtdeMutacoes = numero de mutacoes na fase de mutacao
@@ -42,7 +42,7 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         
         //*****************LEITURA*********************
         FileManager fileManager = new FileManager();
-        ArrayList<String> text = fileManager.stringReader("./Teste_1.txt");
+        ArrayList<String> text = fileManager.stringReader("./Teste_3.txt");
         
         qtdeVertices = Integer.parseInt(text.get(0));
         matrizAdj = new int[qtdeVertices][qtdeVertices];
@@ -95,18 +95,18 @@ public class CaixeiroViajanteAlgoritmoGenetico {
             System.out.println();
             System.out.println();
             criaIndividuos(qtdeGerados, qtdeVertices, aux);
-            aux.mostraPopulacao();
+            //aux.mostraPopulacao();
 
             cruzamento(aux, qtdeDeCruzamentos, k, qtdeVertices);
-            aux.mostraPopulacao();
+            //aux.mostraPopulacao();
             
             k = k + qtdeDeCruzamentos;
             mutacao(aux, qtdeDeMutacoes, k, qtdeVertices, mutacoesPorIndividuo);
-            aux.mostraPopulacao();
+            //aux.mostraPopulacao();
 
             k = k - qtdeDeCruzamentos;
             selecao (k, qtdeVertices, aux, passaDaSelecao, qtdeDeCruzamentos);
-            aux.mostraPopulacao();
+            //aux.mostraPopulacao();
             qtdeGerados = k - passaDaSelecao;
         }
         long tempoFinal = System.currentTimeMillis();
@@ -118,7 +118,14 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         System.out.println("Cruzamentos por geração: " + qtdeDeCruzamentos);
         System.out.println("Mutações por geração: " + qtdeDeMutacoes);
         System.out.println("Trocas por mutação: " + mutacoesPorIndividuo);
-        exibeMelhorCaminho(aux, qtdeVertices);
+        
+        int dataSize = 1024 * 1024;
+        Runtime runtime = Runtime.getRuntime();
+        //System.out.println ("Memoria máxima: " + runtime.maxMemory() / dataSize + "MB");
+        //System.out.println ("Memoria total: " + runtime.totalMemory() / dataSize + "MB");
+        //System.out.println ("Memoria livre: " + runtime.freeMemory() / dataSize + "MB");
+        System.out.println ("Memoria usada: " + (runtime.totalMemory() - runtime.freeMemory()) / dataSize + "MB");
+        exibeMelhorCaminho(aux, qtdeVertices, k);
     }
     
     //********************CRIA INDIVÍDUOS*******************
@@ -329,12 +336,19 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         return soma;
     }
     
-    public static void exibeMelhorCaminho(Populacao aux, int tam){
-        System.out.print("Melhor caminho: ");
-        for (int i = 0; i < tam; i++) {
-            System.out.print(aux.getListaDeIndividuos().get(0).getIndividuo()[i] + " ");
+    public static void exibeMelhorCaminho(Populacao aux, int tam, int k){
+        for (int i = 0; i < k; i++) {
+            if (aux.getListaDeIndividuos().get(i).getEsforco() != -1){
+                System.out.print("Melhor caminho: ");
+                for (int j = 0; j < tam; j++) {
+                    System.out.print(aux.getListaDeIndividuos().get(i).getIndividuo()[j] + " ");
+                }
+                System.out.println();
+                System.out.println("Esforço: " + aux.getListaDeIndividuos().get(i).getEsforco());
+                break;
+            }
+            
         }
-        System.out.println();
-        System.out.println("Esforço: " + aux.getListaDeIndividuos().get(0).getEsforco());
+        
     }
 }
