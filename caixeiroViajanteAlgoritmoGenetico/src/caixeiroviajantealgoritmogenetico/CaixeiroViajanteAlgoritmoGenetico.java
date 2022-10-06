@@ -16,9 +16,10 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         //porcentagem da população que sofrerá mutação, cruzamento e que passará da seleção. A porcentagem vezes a quantidade 
         //de vértices vai indicar a quantidade de trocas na mutação
         
-        int k = 100;
-        double porcentagem = 0.2;
-        int iteracoes = 10;
+        int k = 100000;
+        double porcentagem = 0.5;
+        int iteracoes = 100;
+        int qtdeVertices = 12;
         
         //mutacoesPorIndividuo = mudancas dentro do individuo
         //qtdeMutacoes = numero de mutacoes na fase de mutacao
@@ -36,22 +37,25 @@ public class CaixeiroViajanteAlgoritmoGenetico {
         passaDaSelecao = (int)(porcentagem * k);
         
         Populacao aux = new Populacao();
-        int qtdeVertices, peso, vertice, qtdeArestas;
+        int peso, vertice, qtdeArestas;
+        int qtdeVerticesTotal;
         int matrizAdj[][] = null;
+        int matrizAdjInicial[][] = null;
         String caminhos;
         
         //*****************LEITURA*********************
         FileManager fileManager = new FileManager();
         ArrayList<String> text = fileManager.stringReader("./Teste_3.txt");
         
-        qtdeVertices = Integer.parseInt(text.get(0));
+        qtdeVerticesTotal = Integer.parseInt(text.get(0));
+        matrizAdjInicial = new int[qtdeVerticesTotal][qtdeVerticesTotal];
         matrizAdj = new int[qtdeVertices][qtdeVertices];
         
         //a porcentagem determinada vezes a quantidade de vertices = quantidade de trocas na mutacao
         mutacoesPorIndividuo = (int)(porcentagem * qtdeVertices);
         
         ///*****************CRIANDO MATRIZ DE ADJACÊNCIA*********************
-        for (int i = 0; i < qtdeVertices; i++) {
+        for (int i = 0; i < qtdeVerticesTotal; i++) {
             caminhos = text.get(i+1);
             qtdeArestas = (caminhos.split(";")).length;
             String[] semVertice = caminhos.split(" ");
@@ -65,15 +69,30 @@ public class CaixeiroViajanteAlgoritmoGenetico {
                 vertice = Integer.parseInt(semHifen[0]);
                 peso = Integer.parseInt(semPontoEVirgula[0]);
 
-                matrizAdj[i][vertice] = peso;
+                matrizAdjInicial[i][vertice] = peso;
             }
-            for (int j = 0; j < qtdeVertices; j++) {
-                if (matrizAdj[i][j] == 0){
-                    matrizAdj[i][j] = -1;
+            for (int j = 0; j < qtdeVerticesTotal; j++) {
+                if (matrizAdjInicial[i][j] == 0){
+                    matrizAdjInicial[i][j] = -1;
                 }
             }
             
-            matrizAdj[i][i] = -1;
+            matrizAdjInicial[i][i] = -1;
+        }
+        
+        System.out.println("--------------------MATRIZ INICIAL--------------------");
+        for (int i = 0; i < qtdeVerticesTotal; i++) {
+            for (int j = 0; j < qtdeVerticesTotal; j++) {
+                System.out.print(matrizAdjInicial[i][j] + "    ");
+            }
+            System.out.println("  ");
+        }
+        System.out.println();
+        
+        for (int i = 0; i < qtdeVertices; i++) {
+            for (int j = 0; j < qtdeVertices; j++) {
+                matrizAdj[i][j] = matrizAdjInicial[i][j];
+            }
         }
         
         System.out.println("--------------------MATRIZ--------------------");
